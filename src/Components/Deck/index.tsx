@@ -1,20 +1,11 @@
 import { useSprings, animated, to as interpolate } from "@react-spring/web";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { useDrag } from "react-use-gesture";
 
 import "../../t.css";
 
-const cards = [
-  "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/RWS_Tarot_02_High_Priestess.jpg/690px-RWS_Tarot_02_High_Priestess.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
-];
-
 // TODO:
-// ! Two kind of card view. as they currently are and ontop of the default 
+// ! Two kind of card view. as they currently are and ontop of the default
 
 const to = (i: number) => ({
   x: 0,
@@ -29,9 +20,13 @@ const trans = (r: number, s: number) =>
     r / 10
   }deg) rotateZ(${r}deg) scale(${s})`;
 
-const Deck = () => {
+type DeckProps = {
+  images: string[];
+};
+
+const Deck = ({ images }: DeckProps): ReactElement => {
   const [gone] = useState(() => new Set());
-  const [props, api] = useSprings(cards.length, (i) => ({
+  const [props, api] = useSprings(images.length, (i) => ({
     ...to(i),
     from: from(i),
   }));
@@ -54,7 +49,7 @@ const Deck = () => {
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
         };
       });
-      if (!down && gone.size === cards.length)
+      if (!down && gone.size === images.length)
         setTimeout(() => {
           gone.clear();
           api.start((i) => to(i));
@@ -69,7 +64,7 @@ const Deck = () => {
             {...bind(i)}
             style={{
               transform: interpolate([rot, scale], trans),
-              backgroundImage: `url(${cards[i]})`,
+              backgroundImage: `url(${images[i]})`,
             }}
           />
         </animated.div>
