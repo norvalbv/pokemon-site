@@ -86,37 +86,39 @@ const App = (): ReactElement => {
           <div>
             <button
               type="button"
-              onClick={() =>
+              onClick={() => {
+                if (max) return;
                 setPokemonFetchers((prev) => ({
                   ...prev,
                   stackCount: {
                     min: processedMin,
                     max: processedMax,
-                    current: max
-                      ? pokemonFetchers.stackCount.current
-                      : pokemonFetchers.stackCount.current + 5,
+                    current: pokemonFetchers.stackCount.current + 5,
                   },
-                }))
-              }
-              className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+                }));
+              }}
+              className={`${
+                !max ? "hover:shadow-sm hover:scale-95" : ""
+              } w-16 font-Courgette transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white`}
             >
               {max ? "MAX" : "+ 5"}
             </button>
             <button
               type="button"
-              onClick={() =>
+              onClick={() => {
+                if (min) return;
                 setPokemonFetchers((prev) => ({
                   ...prev,
                   stackCount: {
                     min: processedMin,
                     max: processedMax,
-                    current: min
-                      ? pokemonFetchers.stackCount.current
-                      : pokemonFetchers.stackCount.current - 5,
+                    current: pokemonFetchers.stackCount.current - 5,
                   },
-                }))
-              }
-              className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+                }));
+              }}
+              className={`${
+                !min ? "hover:scale-95 hover:shadow-sm" : ""
+              } w-16 font-Courgette transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white`}
             >
               {min ? "MIN" : "- 5"}
             </button>
