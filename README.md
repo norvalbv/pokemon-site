@@ -29,3 +29,8 @@ If you wish to clone the project and run locally please view the following:
    ```sh
    yarn start
    ```
+
+
+## Screenshot:
+
+![Project screenshot](/public/demo.png)
