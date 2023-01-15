@@ -1,30 +1,21 @@
 import axios, { AxiosError } from "axios";
 
-type Pokemon<T> = {
-  image: string;
-  name: string;
-  stats: {
-    base_stat: number;
-    effort: number;
-    stat: { name: string; url: string };
-  }[];
-  weight: number;
-  height: number;
-  id: number;
-  baseExperience: number;
-  forms: { [key: string]: string | Array<T> | number };
-  species: { [key: string]: string | Array<T> | number };
-  data: T;
+type usePokemonsProps = {
+  randomise: number;
+  stackCount: { min: number; max: number; current: number };
 };
 
 /**
  * Obtain full list of pokemons
  */
-export const usePokemons = async (randomise: number, stackCount = 10) => {
+export const usePokemons = async ({
+  randomise,
+  stackCount,
+}: usePokemonsProps) => {
   let error: AxiosError | null = null;
-  let data: Pokemon = [];
+  let data = [];
 
-  for (let i = randomise; i <= randomise + stackCount; i++) {
+  for (let i = randomise; i < randomise + stackCount.current; i++) {
     data.push(
       await axios(`https://pokeapi.co/api/v2/pokemon/${i}`)
         .then(async (response) => {
@@ -52,19 +43,3 @@ export const usePokemons = async (randomise: number, stackCount = 10) => {
 
   return { data, error };
 };
-
-/**
- * Obtain individual pokemon
- */
-export const usePokemon = async () => {
-  let error: AxiosError | null = null;
-
-  const data = await axios("https://pokeapi.co/api/v2/pokemon/1/")
-    .then((response) => response.data)
-    .catch((err: AxiosError) => (error = err));
-
-  return { data, error };
-};
-
-// fetch a list of 10 random pokemons with a randomise button to display their cards.
-// display full list of pokemons in list view.

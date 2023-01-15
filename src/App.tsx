@@ -1,27 +1,43 @@
 import { ReactElement, useEffect, useState } from "react";
 import Deck from "./Components/Deck";
 import List from "./Components/List";
-import { usePokemon, usePokemons } from "./Services/DataApi";
+import Spinner from "./Components/Spinner";
+import { usePokemons } from "./Services/DataApi";
 
 const App = (): ReactElement => {
   const [d, setD] = useState<any | null>(null);
-  const [r, setR] = useState(10);
+  const [pokemonFetchers, setPokemonFetchers] = useState({
+    randomise: 10,
+    stackCount: {
+      min: 5,
+      max: 25,
+      current: 10,
+    },
+  });
+  const [loading, setLoading] = useState(false);
+
+  const min =
+    pokemonFetchers.stackCount.current <= pokemonFetchers.stackCount.min;
+  const processedMin = pokemonFetchers.stackCount.min;
+  const max =
+    pokemonFetchers.stackCount.current >= pokemonFetchers.stackCount.max;
+  const processedMax = pokemonFetchers.stackCount.max;
 
   const [type, setType] = useState<"cards" | "list">("cards");
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await usePokemons(r);
+      setLoading(true);
+      const { data } = await usePokemons(pokemonFetchers);
 
       setD(data);
+      setLoading(false);
     })();
-  }, [r]);
-
-  if (!d) return <></>;
+  }, [pokemonFetchers]);
 
   return (
-    <div className="bg-gradient-to-br from-red-100 via-green-50 to-blue-100 h-screen w-screen">
-      <div className="absolute text-center p-10 right-0 left-0">
+    <div className="bg-gradient-to-br from-red-100 via-green-50 to-blue-100 min-h-screen relative">
+      <div className="relative text-center p-10 w-full">
         <h1 className="font-Courgette text-green-900 text-4xl underline underline-offset-4">
           PokeCards
         </h1>
@@ -30,18 +46,82 @@ const App = (): ReactElement => {
           className="hover:scale-95 hover:shadow-sm transition-all mt-10 px-4 py-2 rounded-lg border-4 bg-white"
           onClick={() => setType(type === "cards" ? "list" : "cards")}
         >
-          View {type === "cards" ? "list" : "cards"}
+          View Pokemon {type === "cards" ? "List" : "cards"}
         </button>
       </div>
-
-      {type === "cards" ? (
-        <div className="h-full w-full grid place-items-center cursor-move font-serif">
-          <Deck data={d} onClick={() => setR(Math.ceil(Math.random() * 100))} />
+      {loading || !d ? (
+        <div className="grid place-items-center">
+          <Spinner />
         </div>
       ) : (
-        <div className="min-h-full w-full relative top-60 mx-10">
-          <List data={d} />
-        </div>
+        <>
+          {type === "cards" ? (
+            <div className="h-full w-full grid place-items-center font-serif mt-60">
+              <Deck data={d} />
+            </div>
+          ) : (
+            <div className="mx-10 pb-32">
+              <List data={d} />
+            </div>
+          )}
+          <div className="w-full flex items-center justify-center gap-10 absolute bottom-10">
+            <button
+              type="button"
+              onClick={() =>
+                setPokemonFetchers((prev) => ({
+                  ...prev,
+                  randomise: Math.ceil(Math.random() * 100),
+                }))
+              }
+              className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+            >
+              Randomise Pokemon
+            </button>
+            <div className="flex flex-col items-bottom justify-center relative">
+              <span className="absolute -top-6 italic underline text-sm uppercase">
+                Stack Count: {pokemonFetchers.stackCount.current}
+              </span>
+              <div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPokemonFetchers((prev) => ({
+                      ...prev,
+                      stackCount: {
+                        min: processedMin,
+                        max: processedMax,
+                        current: max
+                          ? pokemonFetchers.stackCount.current
+                          : pokemonFetchers.stackCount.current + 5,
+                      },
+                    }))
+                  }
+                  className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+                >
+                  {max ? "MAX" : "+ 5"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPokemonFetchers((prev) => ({
+                      ...prev,
+                      stackCount: {
+                        min: processedMin,
+                        max: processedMax,
+                        current: min
+                          ? pokemonFetchers.stackCount.current
+                          : pokemonFetchers.stackCount.current - 5,
+                      },
+                    }))
+                  }
+                  className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+                >
+                  {min ? "MIN" : "- 5"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
