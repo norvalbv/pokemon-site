@@ -64,65 +64,65 @@ const App = (): ReactElement => {
               <List data={d} />
             </div>
           )}
-          <div className="w-full flex items-center justify-center gap-10 absolute bottom-10">
+        </>
+      )}
+      <div className="w-full flex items-center justify-center gap-10 absolute bottom-10">
+        <button
+          type="button"
+          onClick={() =>
+            setPokemonFetchers((prev) => ({
+              ...prev,
+              randomise: Math.ceil(Math.random() * 100),
+            }))
+          }
+          className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+        >
+          Randomise Pokemon
+        </button>
+        <div className="flex flex-col items-bottom justify-center relative">
+          <span className="absolute -top-6 italic underline text-sm uppercase">
+            Stack Count: {pokemonFetchers.stackCount.current}
+          </span>
+          <div>
             <button
               type="button"
               onClick={() =>
                 setPokemonFetchers((prev) => ({
                   ...prev,
-                  randomise: Math.ceil(Math.random() * 100),
+                  stackCount: {
+                    min: processedMin,
+                    max: processedMax,
+                    current: max
+                      ? pokemonFetchers.stackCount.current
+                      : pokemonFetchers.stackCount.current + 5,
+                  },
                 }))
               }
               className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
             >
-              Randomise Pokemon
+              {max ? "MAX" : "+ 5"}
             </button>
-            <div className="flex flex-col items-bottom justify-center relative">
-              <span className="absolute -top-6 italic underline text-sm uppercase">
-                Stack Count: {pokemonFetchers.stackCount.current}
-              </span>
-              <div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setPokemonFetchers((prev) => ({
-                      ...prev,
-                      stackCount: {
-                        min: processedMin,
-                        max: processedMax,
-                        current: max
-                          ? pokemonFetchers.stackCount.current
-                          : pokemonFetchers.stackCount.current + 5,
-                      },
-                    }))
-                  }
-                  className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
-                >
-                  {max ? "MAX" : "+ 5"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setPokemonFetchers((prev) => ({
-                      ...prev,
-                      stackCount: {
-                        min: processedMin,
-                        max: processedMax,
-                        current: min
-                          ? pokemonFetchers.stackCount.current
-                          : pokemonFetchers.stackCount.current - 5,
-                      },
-                    }))
-                  }
-                  className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
-                >
-                  {min ? "MIN" : "- 5"}
-                </button>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() =>
+                setPokemonFetchers((prev) => ({
+                  ...prev,
+                  stackCount: {
+                    min: processedMin,
+                    max: processedMax,
+                    current: min
+                      ? pokemonFetchers.stackCount.current
+                      : pokemonFetchers.stackCount.current - 5,
+                  },
+                }))
+              }
+              className="font-Courgette hover:scale-95 hover:shadow-sm transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+            >
+              {min ? "MIN" : "- 5"}
+            </button>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };
