@@ -12,6 +12,7 @@ export const usePokemons = async (randomise: number) => {
       await axios(`https://pokeapi.co/api/v2/pokemon/${i}`)
         .then((response) => {
           const { data } = response;
+          console.log(data);
           return {
             image: data.sprites.front_default,
             name: data.name,
@@ -19,6 +20,7 @@ export const usePokemons = async (randomise: number) => {
             weight: data.weight,
             height: data.height,
             id: data.id,
+            baseExperience: data.base_experience,
             data,
           };
         })
