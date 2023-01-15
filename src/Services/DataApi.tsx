@@ -20,11 +20,11 @@ type Pokemon<T> = {
 /**
  * Obtain full list of pokemons
  */
-export const usePokemons = async (randomise: number) => {
+export const usePokemons = async (randomise: number, stackCount = 10) => {
   let error: AxiosError | null = null;
   let data: Pokemon = [];
 
-  for (let i = randomise; i <= randomise + 10; i++) {
+  for (let i = randomise; i <= randomise + stackCount; i++) {
     data.push(
       await axios(`https://pokeapi.co/api/v2/pokemon/${i}`)
         .then(async (response) => {

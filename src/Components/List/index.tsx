@@ -1,8 +1,11 @@
+import { capitalizeFirstLetter } from "../../utils/CapitliseFirstLetter";
+
 type ListProps = {
   data: any;
 };
 
 const List = ({ data }: ListProps) => {
+  console.log(data);
   return data.map(
     ({
       image,
@@ -35,23 +38,30 @@ const List = ({ data }: ListProps) => {
               </ul>
             </div>
             <div className="flex items-center justify-center w-60">
-              <span className="-rotate-90 relative inline-block -mr-2 underline underline-offset-4">
-                Stat Data:
+              <span className="-rotate-90 relative inline-block underline underline-offset-4">
+                Species:
               </span>
               <ul>
-                <li>Weight: {weight}</li>
-                <li>Height: {height}</li>
-                <li>Experience: {baseExperience}</li>
+                <li>Happiness: {species.base_happiness}</li>
+                <li>Capture Rate: {species.capture_rate}</li>
+                <li>
+                  Mythical:{" "}
+                  {capitalizeFirstLetter(species.is_mythical.toString())}
+                </li>
               </ul>
             </div>
             <div className="flex items-center justify-center w-60">
-              <span className="-rotate-90 relative inline-block -mr-6 underline underline-offset-4">
-                Pokemon Data:
+              <span className="-rotate-90 relative inline-block mr-1 underline underline-offset-4">
+                Form:
               </span>
               <ul>
-                <li>Weight: {weight}</li>
-                <li>Height: {height}</li>
-                <li>Experience: {baseExperience}</li>
+                <li>
+                  Battle Pokemon?:{" "}
+                  {capitalizeFirstLetter(forms.is_battle_only.toString())}
+                </li>
+                <li>
+                  is Mega?: {capitalizeFirstLetter(forms.is_mega.toString())}
+                </li>
               </ul>
             </div>
           </div>
