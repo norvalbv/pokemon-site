@@ -1,5 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import Deck from "./Components/Deck";
+import List from "./Components/List";
 import { usePokemon, usePokemons } from "./Services/DataApi";
 
 const App = (): ReactElement => {
@@ -34,11 +35,13 @@ const App = (): ReactElement => {
       </div>
 
       {type === "cards" ? (
-        <div className="h-full w-full grid place-items-center cursor-move">
+        <div className="h-full w-full grid place-items-center cursor-move font-serif">
           <Deck data={d} onClick={() => setR(Math.ceil(Math.random() * 100))} />
         </div>
       ) : (
-        <div></div>
+        <div className="min-h-full w-full relative top-60 mx-10">
+          <List data={d} />
+        </div>
       )}
     </div>
   );

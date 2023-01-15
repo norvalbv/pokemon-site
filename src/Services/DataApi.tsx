@@ -1,18 +1,34 @@
 import axios, { AxiosError } from "axios";
 
+type Pokemon<T> = {
+  image: string;
+  name: string;
+  stats: {
+    base_stat: number;
+    effort: number;
+    stat: { name: string; url: string };
+  }[];
+  weight: number;
+  height: number;
+  id: number;
+  baseExperience: number;
+  forms: { [key: string]: string | Array<T> | number };
+  species: { [key: string]: string | Array<T> | number };
+  data: T;
+};
+
 /**
  * Obtain full list of pokemons
  */
 export const usePokemons = async (randomise: number) => {
   let error: AxiosError | null = null;
-  let data = [];
+  let data: Pokemon = [];
 
   for (let i = randomise; i <= randomise + 10; i++) {
     data.push(
       await axios(`https://pokeapi.co/api/v2/pokemon/${i}`)
-        .then((response) => {
+        .then(async (response) => {
           const { data } = response;
-          console.log(data);
           return {
             image: data.sprites.front_default,
             name: data.name,
@@ -21,6 +37,12 @@ export const usePokemons = async (randomise: number) => {
             height: data.height,
             id: data.id,
             baseExperience: data.base_experience,
+            forms: await axios(data.forms[0].url)
+              .then((res) => res.data)
+              .catch((err) => console.error(err)),
+            species: await axios(data.species.url)
+              .then((res) => res.data)
+              .catch((err) => console.error(err)),
             data,
           };
         })

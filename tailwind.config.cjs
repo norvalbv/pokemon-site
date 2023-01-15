@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         Courgette: ["Courgette", "cursive"],
       },
+      boxShadow: {
+        card: "0 12.5px 100px -10px rgba(50, 50, 73, 0.4), 10px 10px -10px rgba(50, 50, 73, 0.3)",
+      },
     },
   },
   plugins: [],

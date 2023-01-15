@@ -1,11 +1,9 @@
 import { useSprings, animated, to as interpolate } from "@react-spring/web";
 import { ReactElement, useState } from "react";
 import { useDrag } from "react-use-gesture";
+import { capitalizeFirstLetter } from "../../utils/CapitliseFirstLetter";
 
 import "../../t.css";
-
-// TODO:
-// ! Two kind of card view. as they currently are and ontop of the default
 
 const to = (i: number) => ({
   x: 0,
@@ -60,10 +58,23 @@ const Deck = ({ data, onClick }: DeckProps): ReactElement => {
   return (
     <>
       {props.map(({ x, y, rot, scale }, i) => {
-        console.log(data[i]);
-        const { image, height, id, name, stats, baseExperience, weight } = data[i];
+        const {
+          image,
+          height,
+          id,
+          name,
+          stats,
+          baseExperience,
+          weight,
+          forms,
+          species,
+        } = data[i];
         return (
-          <animated.div className="deck" key={i} style={{ x, y }}>
+          <animated.div
+            className="deck touch-none absolute flex items-center justify-center"
+            key={i}
+            style={{ x, y }}
+          >
             <animated.div
               {...bind(i)}
               style={{
@@ -74,22 +85,27 @@ const Deck = ({ data, onClick }: DeckProps): ReactElement => {
                 backgroundSize: "contain",
                 backgroundPosition: "center",
               }}
-              className="border-stone-700 border-2"
+              className="border-stone-700 border-2 w-[45vh] max-w-[200px] h-[85vh] will-change-transform max-h-[335px] rounded-lg"
             >
-              <div className="font-semibold underline underline-offset-4 p-4">
-                {/* Capitalises first letter */}
-                {name[0].toUpperCase() + name.substring(1)}
+              <div className="font-semibold underline underline-offset-4 p-4 font-Courgette">
+                {capitalizeFirstLetter(name)}
               </div>
-              <div className="border-t border-dashed border-stone-700 leading-tight absolute bottom-0 w-full h-[20%] text-xs p-2 flex items-center justify-between">
+              <div className="border-t border-dashed border-stone-700 leading-tight absolute bottom-0 w-full h-[20%] text-[11px] p-2 flex items-center justify-between">
                 <ul>
                   <li>Height: {height}</li>
                   <li>Weight: {weight}</li>
                   <li>Experience: {baseExperience}</li>
                 </ul>
                 <ul>
-                  <li>Stats: {name}</li>
-                  <li>Height: {height}</li>
-                  <li>Weight: {weight}</li>
+                  <li>Happiness: {species.base_happiness}</li>
+                  <li>
+                    Mythical:{" "}
+                    {capitalizeFirstLetter(species.is_mythical.toString())}
+                  </li>
+                  <li>
+                    Is Warrior:{" "}
+                    {capitalizeFirstLetter(forms.is_battle_only.toString())}
+                  </li>
                 </ul>
               </div>
             </animated.div>
@@ -100,7 +116,7 @@ const Deck = ({ data, onClick }: DeckProps): ReactElement => {
       <button
         type="button"
         onClick={onClick}
-        className="hover:scale-95 hover:shadow-sm transition-all absolute bottom-32 px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+        className="font-Courgette hover:scale-95 hover:shadow-sm transition-all absolute bottom-32 px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
       >
         Randomise Pokemon
       </button>
