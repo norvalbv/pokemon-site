@@ -4,21 +4,21 @@ import { usePokemon, usePokemons } from "./Services/DataApi";
 
 const App = (): ReactElement => {
   const [d, setD] = useState<any | null>(null);
+  const [r, setR] = useState(10);
+
   useEffect(() => {
     (async () => {
-      const { data, error } = await usePokemons({});
+      const { data, error } = await usePokemons(r);
 
-      setD(data.map((d) => d.image));
+      setD(data);
     })();
-  }, []);
+  }, [r]);
 
   if (!d) return <></>;
 
-  console.log(d);
-
   return (
     <div className="bg-red-50 h-screen w-screen grid place-items-center cursor-move">
-      <Deck images={d} />
+      <Deck data={d} onClick={() => setR(Math.ceil(Math.random() * 100))} />
     </div>
   );
 };

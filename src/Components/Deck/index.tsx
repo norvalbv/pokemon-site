@@ -21,12 +21,13 @@ const trans = (r: number, s: number) =>
   }deg) rotateZ(${r}deg) scale(${s})`;
 
 type DeckProps = {
-  images: string[];
+  data: any;
+  onClick: () => void;
 };
 
-const Deck = ({ images }: DeckProps): ReactElement => {
+const Deck = ({ data, onClick }: DeckProps): ReactElement => {
   const [gone] = useState(() => new Set());
-  const [props, api] = useSprings(images.length, (i) => ({
+  const [props, api] = useSprings(data.length, (i) => ({
     ...to(i),
     from: from(i),
   }));
@@ -49,7 +50,7 @@ const Deck = ({ images }: DeckProps): ReactElement => {
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
         };
       });
-      if (!down && gone.size === images.length)
+      if (!down && gone.size === data.length)
         setTimeout(() => {
           gone.clear();
           api.start((i) => to(i));
@@ -58,17 +59,50 @@ const Deck = ({ images }: DeckProps): ReactElement => {
   );
   return (
     <>
-      {props.map(({ x, y, rot, scale }, i) => (
-        <animated.div className="deck" key={i} style={{ x, y }}>
-          <animated.div
-            {...bind(i)}
-            style={{
-              transform: interpolate([rot, scale], trans),
-              backgroundImage: `url(${images[i]})`,
-            }}
-          />
-        </animated.div>
-      ))}
+      {props.map(({ x, y, rot, scale }, i) => {
+        console.log(data[i]);
+        const { image, height, id, name, stats, weight } = data[i];
+        return (
+          <animated.div className="deck" key={i} style={{ x, y }}>
+            <animated.div
+              {...bind(i)}
+              style={{
+                transform: interpolate([rot, scale], trans),
+                background: "#eb01a5",
+                backgroundImage: `url(${image}), linear-gradient(to bottom right, #FEF08A, #B4FED8, #D8B4FE, #FCA5A5)`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="font-semibold underline underline-offset-4 p-4">
+                {name[0].toUpperCase() + name.substring(1)}
+              </div>
+              <div className="leading-tight absolute bottom-0 w-full h-[20%] text-xs p-2 flex items-center justify-between">
+                <ul>
+                  {/* Capitalises first letter */}
+                  <li>Id: {id}</li>
+                  <li>Height: {height}</li>
+                  <li>Weight: {weight}</li>
+                </ul>
+                <ul>
+                  <li>Name: {name}</li>
+                  <li>Height: {height}</li>
+                  <li>Weight: {weight}</li>
+                </ul>
+              </div>
+            </animated.div>
+          </animated.div>
+        );
+      })}
+      <div className="absolute bottom-96">&larr; Drag cards &rarr;</div>
+      <button
+        type="button"
+        onClick={onClick}
+        className="hover:scale-95 hover:shadow-sm transition-all absolute bottom-32 px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white"
+      >
+        Randomise Pokemon
+      </button>
     </>
   );
 };
