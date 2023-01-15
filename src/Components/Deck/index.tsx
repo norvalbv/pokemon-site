@@ -112,7 +112,7 @@ const Deck = ({ data }: DeckProps): ReactElement => {
         })}
       </div>
       <div className="absolute bottom-40">
-        <span>&larr; Drag cards &rarr;</span>
+        <span>&larr; Fling cards &rarr;</span>
       </div>
     </>
   );
