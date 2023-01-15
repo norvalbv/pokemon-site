@@ -98,7 +98,7 @@ const App = (): ReactElement => {
                 }));
               }}
               className={`${
-                !max ? "hover:shadow-sm hover:scale-95" : ""
+                !max ? "hover:shadow-sm hover:scale-95" : "cursor-default"
               } w-16 font-Courgette transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white`}
             >
               {max ? "MAX" : "+ 5"}
@@ -117,7 +117,7 @@ const App = (): ReactElement => {
                 }));
               }}
               className={`${
-                !min ? "hover:scale-95 hover:shadow-sm" : ""
+                !min ? "hover:scale-95 hover:shadow-sm" : "cursor-default"
               } w-16 font-Courgette transition-all px-4 py-2 rounded-lg border-4 shadow-md shadow-amber-500 bg-white`}
             >
               {min ? "MIN" : "- 5"}
